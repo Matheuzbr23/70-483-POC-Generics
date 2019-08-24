@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,9 +11,8 @@ namespace ConsoleUI
     {
         static void Main(string[] args)
         {
-            
+            DemonstrateTextFileStorage();
 
-            
             Console.WriteLine();
             Console.Write("Press enter to shut down...");
             Console.ReadLine();
@@ -27,14 +27,34 @@ namespace ConsoleUI
 
             PopulateLists(people, logs);
 
-            OriginalTextFileProcessor.SavePeople(people, peopleFile);
+            GenericTextFileProcessor.SaveToTextFile<Person>(people, peopleFile);
+            GenericTextFileProcessor.SaveToTextFile<LogEntry>(logs, logFile);
 
-            var newPeople = OriginalTextFileProcessor.LoadPeople(peopleFile);
+            var newPeople = GenericTextFileProcessor.LoadFromTextFile<Person>(peopleFile);
 
             foreach (var p in newPeople)
             {
                 Console.WriteLine($"{ p.FirstName } { p.LastName } (IsAlive = { p.IsAlive })");
             }
+
+            Console.WriteLine();
+
+            var newLogs = GenericTextFileProcessor.LoadFromTextFile<LogEntry>(logFile);
+
+            foreach (var l in newLogs)
+            {
+                Console.WriteLine($"{ l. ErrorCode} { l.Message } at { l.TimeOfEvent.ToShortTimeString() })");
+            }
+
+            /* Old way*/
+            //OriginalTextFileProcessor.SavePeople(people, peopleFile);
+
+            //var newPeople = OriginalTextFileProcessor.LoadPeople(peopleFile);
+
+            //foreach (var p in newPeople)
+            //{
+            //    Console.WriteLine($"{ p.FirstName } { p.LastName } (IsAlive = { p.IsAlive })");
+            //}
         }
 
         private static void PopulateLists(List<Person> people, List<LogEntry> logs)
